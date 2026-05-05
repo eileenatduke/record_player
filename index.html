@@ -505,35 +505,159 @@
     align-items: center;
   }
 
-  /* ===== Apple Music embed ===== */
-  .player-frame {
+  /* ===== Vintage tracklist sleeve ===== */
+  .sleeve {
     width: min(560px, 95vw);
-    background: linear-gradient(180deg, rgba(20, 10, 6, 0.6), rgba(0, 0, 0, 0.4));
-    border: 1px solid rgba(212, 169, 60, 0.22);
-    border-radius: 16px;
-    padding: 18px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(233, 198, 107, 0.06), transparent 60%),
+      linear-gradient(180deg, #1f120a 0%, #15090a 100%);
+    border: 1px solid rgba(212, 169, 60, 0.35);
+    border-radius: 6px;
+    padding: 32px 32px 26px;
     box-shadow:
-      0 20px 50px rgba(0, 0, 0, 0.55),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      0 24px 60px rgba(0, 0, 0, 0.6),
+      inset 0 0 0 1px rgba(212, 169, 60, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    position: relative;
   }
-  .player-frame iframe {
-    width: 100%;
-    height: 450px;
-    border: 0;
-    border-radius: 10px;
-    background: transparent;
+  .sleeve::before,
+  .sleeve::after {
+    content: '';
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
+    opacity: 0.5;
+  }
+  .sleeve::before { top: 14px; }
+  .sleeve::after  { bottom: 14px; }
+
+  .sleeve-header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .sleeve-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 6px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+  .sleeve-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin: 6px 0 4px;
+    text-shadow: 0 0 18px rgba(233, 198, 107, 0.25);
+  }
+  .sleeve-meta {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+  }
+  .sleeve-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--gold-soft);
+    opacity: 0.7;
+    margin: 14px 0 18px;
+  }
+  .sleeve-divider .line {
+    flex: 1; max-width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
+  }
+  .sleeve-divider .glyph {
+    font-size: 10px;
+    letter-spacing: 4px;
+  }
+
+  .tracklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .track {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: baseline;
+    gap: 14px;
+    padding: 9px 4px;
+    border-bottom: 1px dashed rgba(212, 169, 60, 0.18);
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.25s ease, transform 0.25s ease, padding-left 0.25s ease;
+  }
+  .track:last-child { border-bottom: none; }
+  .track:hover {
+    color: var(--gold);
+    padding-left: 10px;
+  }
+  .track-num {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold-soft);
+    opacity: 0.85;
+    text-align: right;
+  }
+  .track-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+  .track-title em {
+    font-style: italic;
+    opacity: 0.7;
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-left: 4px;
+  }
+  .track-time {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-dim);
+    opacity: 0.75;
+    white-space: nowrap;
+  }
+  .track:hover .track-time,
+  .track:hover .track-num { color: var(--gold); opacity: 1; }
+
+  .sleeve-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(212, 169, 60, 0.25);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold-soft);
+    opacity: 0.7;
+    text-transform: uppercase;
   }
 
   .open-link {
     display: inline-block;
-    margin-top: 12px;
     color: var(--gold);
     text-decoration: none;
     font-family: 'Cinzel', serif;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    padding: 4px 0;
+    padding: 2px 0;
     border-bottom: 1px solid rgba(212, 169, 60, 0.4);
     transition: all 0.2s;
   }
@@ -666,24 +790,88 @@
     </div>
   </div>
 
-  <div class="player-frame">
-    <iframe
-      id="appleMusicEmbed"
-      allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
-      sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
-      src="https://embed.music.apple.com/us/playlist/the-greatest-showman-the-complete-playlist/pl.c7b53912d85843a7a7ada04ed34d2631">
-    </iframe>
-    <div style="text-align:center;">
+  <div class="sleeve">
+    <div class="sleeve-header">
+      <div class="sleeve-eyebrow">Long Play · Stereo</div>
+      <div class="sleeve-title">Track Listing</div>
+      <div class="sleeve-meta">Original Soundtrack · 11 Songs</div>
+      <div class="sleeve-divider">
+        <span class="line"></span>
+        <span class="glyph">★</span>
+        <span class="line"></span>
+      </div>
+    </div>
+
+    <ol class="tracklist">
+      <a class="track" href="https://music.apple.com/us/album/the-greatest-show/1308246550?i=1308246552" target="_blank" rel="noopener">
+        <span class="track-num">I</span>
+        <span class="track-title">The Greatest Show</span>
+        <span class="track-time">4:39</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/a-million-dreams/1308246550?i=1308246553" target="_blank" rel="noopener">
+        <span class="track-num">II</span>
+        <span class="track-title">A Million Dreams</span>
+        <span class="track-time">4:30</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/a-million-dreams-reprise/1308246550?i=1308246626" target="_blank" rel="noopener">
+        <span class="track-num">III</span>
+        <span class="track-title">A Million Dreams <em>(Reprise)</em></span>
+        <span class="track-time">1:11</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/come-alive/1308246550?i=1308246632" target="_blank" rel="noopener">
+        <span class="track-num">IV</span>
+        <span class="track-title">Come Alive</span>
+        <span class="track-time">4:00</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/the-other-side/1308246550?i=1308246638" target="_blank" rel="noopener">
+        <span class="track-num">V</span>
+        <span class="track-title">The Other Side</span>
+        <span class="track-time">3:27</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/never-enough/1308246550?i=1308246642" target="_blank" rel="noopener">
+        <span class="track-num">VI</span>
+        <span class="track-title">Never Enough</span>
+        <span class="track-time">3:24</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/this-is-me/1308246550?i=1308246649" target="_blank" rel="noopener">
+        <span class="track-num">VII</span>
+        <span class="track-title">This Is Me</span>
+        <span class="track-time">3:55</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/rewrite-the-stars/1308246550?i=1308246657" target="_blank" rel="noopener">
+        <span class="track-num">VIII</span>
+        <span class="track-title">Rewrite the Stars</span>
+        <span class="track-time">3:39</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/tightrope/1308246550?i=1308246664" target="_blank" rel="noopener">
+        <span class="track-num">IX</span>
+        <span class="track-title">Tightrope</span>
+        <span class="track-time">3:00</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/never-enough-reprise/1308246550?i=1308246670" target="_blank" rel="noopener">
+        <span class="track-num">X</span>
+        <span class="track-title">Never Enough <em>(Reprise)</em></span>
+        <span class="track-time">1:21</span>
+      </a>
+      <a class="track" href="https://music.apple.com/us/album/from-now-on/1308246550?i=1308246676" target="_blank" rel="noopener">
+        <span class="track-num">XI</span>
+        <span class="track-title">From Now On</span>
+        <span class="track-time">4:57</span>
+      </a>
+    </ol>
+
+    <div class="sleeve-footer">
+      <span>Cat. No. TGS · MMXVII</span>
       <a class="open-link"
-         href="https://music.apple.com/us/playlist/the-greatest-showman-the-complete-playlist/pl.c7b53912d85843a7a7ada04ed34d2631"
+         href="https://music.apple.com/us/album/the-greatest-showman-original-motion-picture-soundtrack/1308246550"
          target="_blank" rel="noopener">
-        Open in Apple Music
+        Listen on Apple Music
       </a>
     </div>
   </div>
 
   <p class="hint">
-    Press the button (or tap the record, or hit space) to drop the needle. Then play any track in the Apple Music panel — full songs if you're signed in, otherwise 30-second previews. If the embed looks blank, click <em>Open in Apple Music</em> — some browsers block third-party iframes when opened as a local <code>file://</code>.
+    Press the button (or tap the record, or hit space) to drop the needle. Choose a track from the listing to open it in Apple Music.
   </p>
 
 <script>
