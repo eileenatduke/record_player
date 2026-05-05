@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Greatest Showman — Digital Vinyl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold:        #e9c66b;
+    --gold-soft:   #d4a93c;
+    --deep-gold:   #8b6914;
+    --crimson:     #a8201a;
+    --crimson-dk:  #6b1410;
+    --wood-dark:   #2a1810;
+    --wood-mid:    #4a2c1a;
+    --wood-light:  #6b3e26;
+    --ink:         #f4e9d8;
+    --ink-dim:     #c9a875;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 50% -10%, #4a2316 0%, #1a0d08 55%, #0a0504 100%),
+      #0a0504;
+    min-height: 100vh;
+    padding: 56px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    position: relative;
+  }
+
+  /* ===== Title section ===== */
+  .marquee {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    max-width: 680px;
+    padding: 0 12px;
+  }
+
+  h1 {
+    font-family: 'Cinzel', 'Georgia', serif;
+    font-weight: 700;
+    font-size: clamp(30px, 5.5vw, 56px);
+    color: var(--gold);
+    letter-spacing: 4px;
+    line-height: 1.05;
+    text-shadow:
+      0 0 30px rgba(233, 198, 107, 0.35),
+      0 2px 4px rgba(0, 0, 0, 0.6);
+    text-transform: uppercase;
+  }
+
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--gold-soft);
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+  .ornament .line {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
+  }
+  .ornament .star {
+    font-size: 10px;
+    letter-spacing: 4px;
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.8vw, 18px);
+    letter-spacing: 3px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+  }
+
+  /* ===== Turntable wooden plinth ===== */
+  .turntable {
+    position: relative;
+    width: min(560px, 95vw);
+    aspect-ratio: 1;
+    background:
+      linear-gradient(135deg, var(--wood-light) 0%, var(--wood-mid) 50%, var(--wood-dark) 100%);
+    border-radius: 18px;
+    box-shadow:
+      0 40px 100px rgba(0, 0, 0, 0.75),
+      0 12px 30px rgba(0, 0, 0, 0.5),
+      inset 0 2px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(212, 169, 60, 0.15);
+    padding: 5%;
+    overflow: visible;
+    transition: box-shadow 0.6s ease;
+  }
+
+  .turntable.active {
+    box-shadow:
+      0 40px 120px rgba(168, 32, 26, 0.25),
+      0 0 60px rgba(233, 198, 107, 0.15),
+      0 12px 30px rgba(0, 0, 0, 0.5),
+      inset 0 2px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(212, 169, 60, 0.3);
+  }
+
+  /* Wood grain overlay */
+  .turntable::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background:
+      repeating-linear-gradient(
+        92deg,
+        transparent 0px,
+        transparent 4px,
+        rgba(0, 0, 0, 0.04) 4px,
+        rgba(0, 0, 0, 0.04) 5px
+      );
+    pointer-events: none;
+  }
+
+  /* Brand plate on the plinth */
+  .brand-plate {
+    position: absolute;
+    bottom: 4%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: var(--gold-soft);
+    opacity: 0.55;
+    text-transform: uppercase;
+  }
+
+  /* Speed indicator (decorative) */
+  .speed-indicator {
+    position: absolute;
+    top: 6%;
+    left: 6%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--gold-soft);
+    opacity: 0.7;
+  }
+  .speed-indicator .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(212, 169, 60, 0.3);
+    border: 1px solid rgba(212, 169, 60, 0.5);
+    transition: all 0.3s;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .speed-indicator .row { display: flex; align-items: center; }
+  .turntable.active .speed-indicator .dot {
+    background: var(--crimson);
+    box-shadow: 0 0 8px var(--crimson);
+  }
+
+  /* ===== Platter ===== */
+  .platter {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%);
+    box-shadow:
+      inset 0 0 50px rgba(0, 0, 0, 0.85),
+      0 5px 15px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ===== Vinyl record ===== */
+  .vinyl {
+    position: relative;
+    width: 92%;
+    height: 92%;
+    border-radius: 50%;
+    cursor: pointer;
+    background:
+      radial-gradient(circle at center,
+        transparent 0%,
+        transparent 28%,
+        rgba(0, 0, 0, 0.92) 28.5%,
+        rgba(0, 0, 0, 0.92) 100%),
+      repeating-radial-gradient(circle at center,
+        #0a0a0a 0px,
+        #1a1a1a 1px,
+        #0a0a0a 2px,
+        #161616 3px),
+      #000;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 8px 25px rgba(0, 0, 0, 0.7);
+    transition: transform 0.3s ease;
+  }
+
+  .vinyl.playing {
+    animation: spin 1.8s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Reflective sheen — animated subtle rotation independent of vinyl */
+  .vinyl::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255, 255, 255, 0.06) 30deg,
+      transparent 80deg,
+      transparent 180deg,
+      rgba(255, 255, 255, 0.04) 220deg,
+      transparent 280deg
+    );
+    pointer-events: none;
+  }
+
+  /* ===== Center label ===== */
+  .label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 38%;
+    height: 38%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, #c9302a 0%, var(--crimson) 50%, var(--crimson-dk) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--gold);
+    box-shadow:
+      inset 0 2px 8px rgba(255, 255, 255, 0.18),
+      inset 0 -3px 8px rgba(0, 0, 0, 0.3),
+      0 2px 6px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    padding: 6%;
+  }
+
+  /* Decorative ring on label */
+  .label::before {
+    content: '';
+    position: absolute;
+    inset: 8%;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 169, 60, 0.3);
+    pointer-events: none;
+  }
+
+  /* Spindle hole */
+  .label::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 7%;
+    height: 7%;
+    background: #000;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #1a1a1a, inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  .label-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: clamp(9px, 1.7vw, 13px);
+    letter-spacing: 1.5px;
+    line-height: 1.15;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+    text-transform: uppercase;
+  }
+
+  .label-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(7px, 1.1vw, 10px);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 8px;
+  }
+
+  .label-side {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(7px, 1.1vw, 9px);
+    letter-spacing: 3px;
+    margin-top: 8px;
+    border-top: 1px solid rgba(212, 169, 60, 0.35);
+    padding-top: 6px;
+    width: 70%;
+  }
+
+  /* ===== Tonearm ===== */
+  .tonearm-pivot {
+    position: absolute;
+    top: 12%;
+    right: 8%;
+    width: 14%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle at 30% 30%, #e8e8e8 0%, #888 50%, #444 100%);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 2px 4px rgba(255, 255, 255, 0.4),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+      0 4px 10px rgba(0, 0, 0, 0.55);
+    z-index: 20;
+  }
+  .tonearm-pivot::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35%; height: 35%;
+    background: radial-gradient(circle, #222 0%, #000 100%);
+    border-radius: 50%;
+  }
+
+  .tonearm {
+    position: absolute;
+    top: 17%;
+    right: 14%;
+    width: 50%;
+    height: 6px;
+    background: linear-gradient(180deg, #e8e8e8 0%, #888 50%, #555 100%);
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    transform-origin: right center;
+    transform: rotate(-30deg);
+    transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 15;
+  }
+
+  .tonearm.playing { transform: rotate(-12deg); }
+
+  .cartridge {
+    position: absolute;
+    left: 0;
+    top: -6px;
+    width: 24px;
+    height: 18px;
+    background: linear-gradient(180deg, #2a2a2a 0%, #0a0a0a 100%);
+    border-radius: 2px;
+    transform: rotate(20deg);
+    transform-origin: right center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  .cartridge::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    bottom: -3px;
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(233, 198, 107, 0.7);
+  }
+
+  .counterweight {
+    position: absolute;
+    top: 11%;
+    right: 4%;
+    width: 6%;
+    height: 4%;
+    background: linear-gradient(180deg, #444 0%, #1a1a1a 100%);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 19;
+  }
+
+  /* ===== Now playing chip ===== */
+  .now-playing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    border: 1px solid rgba(212, 169, 60, 0.3);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--ink-dim);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+  }
+  .now-playing.live {
+    color: var(--gold);
+    border-color: var(--gold-soft);
+    background: rgba(168, 32, 26, 0.15);
+    box-shadow: 0 0 24px rgba(233, 198, 107, 0.15);
+  }
+  .pulse {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(212, 169, 60, 0.3);
+  }
+  .now-playing.live .pulse {
+    background: #ff4744;
+    box-shadow: 0 0 8px #ff4744;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.6; transform: scale(1.25); }
+  }
+
+  /* ===== Single power button ===== */
+  .controls {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .power-btn {
+    background: radial-gradient(circle at 30% 30%, #6b3e26 0%, #2a1810 80%);
+    color: var(--gold);
+    border: 2px solid var(--deep-gold);
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.6),
+      inset 0 2px 4px rgba(255, 255, 255, 0.12),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+    transition: all 0.25s ease;
+    font-family: inherit;
+    position: relative;
+  }
+  .power-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--gold);
+    box-shadow:
+      0 10px 25px rgba(0, 0, 0, 0.7),
+      0 0 24px rgba(233, 198, 107, 0.3),
+      inset 0 2px 4px rgba(255, 255, 255, 0.18);
+  }
+  .power-btn:active { transform: translateY(0); }
+  .power-btn svg { width: 32px; height: 32px; transition: transform 0.3s; }
+  .power-btn.on {
+    background: radial-gradient(circle at 30% 30%, #c9302a 0%, var(--crimson-dk) 80%);
+    border-color: var(--gold);
+    box-shadow:
+      0 6px 20px rgba(168, 32, 26, 0.5),
+      0 0 30px rgba(233, 198, 107, 0.35),
+      inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  }
+
+  .power-label {
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .power-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ===== Apple Music embed ===== */
+  .player-frame {
+    width: min(560px, 95vw);
+    background: linear-gradient(180deg, rgba(20, 10, 6, 0.6), rgba(0, 0, 0, 0.4));
+    border: 1px solid rgba(212, 169, 60, 0.22);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+  .player-frame iframe {
+    width: 100%;
+    height: 450px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+  }
+
+  .open-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: var(--gold);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(212, 169, 60, 0.4);
+    transition: all 0.2s;
+  }
+  .open-link:hover { color: #fff8e0; border-bottom-color: var(--gold); }
+
+  .hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: var(--ink-dim);
+    text-align: center;
+    opacity: 0.8;
+    max-width: 540px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .hint code {
+    font-family: 'Inter', monospace;
+    font-style: normal;
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(212, 169, 60, 0.15);
+  }
+
+  /* ===== Stage lights ===== */
+  .light {
+    position: fixed;
+    top: -20%;
+    width: 240px;
+    height: 100vh;
+    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: screen;
+    background: radial-gradient(ellipse at top, var(--gold), transparent 60%);
+    filter: blur(30px);
+    transition: opacity 0.8s ease;
+  }
+  .light.left  { left: 4%;  transform: rotate(15deg);  }
+  .light.right { right: 4%; transform: rotate(-15deg); }
+  body.spinning .light { opacity: 0.32; }
+
+  /* ===== Floating dust motes ===== */
+  .dust {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .mote {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 4px var(--gold);
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0%   { transform: translateY(110vh) translateX(0); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-10vh) translateX(40px); opacity: 0; }
+  }
+
+  /* layer everything above .dust */
+  body > *:not(.dust):not(.light) { position: relative; z-index: 1; }
+
+  @media (max-width: 600px) {
+    .speed-indicator { font-size: 8px; }
+    .brand-plate { font-size: 7px; letter-spacing: 3px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="light left"></div>
+  <div class="light right"></div>
+  <div class="dust" id="dust"></div>
+
+  <div class="marquee">
+    <h1>The Greatest Showman</h1>
+    <div class="ornament">
+      <span class="line"></span>
+      <span class="star">★ ★ ★</span>
+      <span class="line"></span>
+    </div>
+    <div class="subtitle">Original Motion Picture Soundtrack</div>
+  </div>
+
+  <div class="now-playing" id="nowPlaying">
+    <span class="pulse"></span>
+    <span id="nowPlayingText">Stylus resting</span>
+  </div>
+
+  <div class="turntable" id="turntable">
+
+    <div class="speed-indicator">
+      <div class="row"><span class="dot"></span>33⅓</div>
+    </div>
+
+    <div class="platter">
+      <div class="vinyl" id="vinyl">
+        <div class="label">
+          <div class="label-title">The Greatest<br>Showman</div>
+          <div class="label-sub">Soundtrack</div>
+          <div class="label-side">SIDE A · 33⅓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="counterweight"></div>
+    <div class="tonearm-pivot"></div>
+    <div class="tonearm" id="tonearm">
+      <div class="cartridge"></div>
+    </div>
+
+    <div class="brand-plate">Phonograph · Est. MMXXVI</div>
+  </div>
+
+  <div class="controls">
+    <div class="power-wrap">
+      <button class="power-btn" id="powerBtn" aria-label="Drop the needle">
+        <svg id="powerIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </button>
+      <div class="power-label" id="powerLabel">Drop Needle</div>
+    </div>
+  </div>
+
+  <div class="player-frame">
+    <iframe
+      id="appleMusicEmbed"
+      allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+      sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+      src="https://embed.music.apple.com/us/playlist/the-greatest-showman-the-complete-playlist/pl.c7b53912d85843a7a7ada04ed34d2631">
+    </iframe>
+    <div style="text-align:center;">
+      <a class="open-link"
+         href="https://music.apple.com/us/playlist/the-greatest-showman-the-complete-playlist/pl.c7b53912d85843a7a7ada04ed34d2631"
+         target="_blank" rel="noopener">
+        Open in Apple Music
+      </a>
+    </div>
+  </div>
+
+  <p class="hint">
+    Press the button (or tap the record, or hit space) to drop the needle. Then play any track in the Apple Music panel — full songs if you're signed in, otherwise 30-second previews. If the embed looks blank, click <em>Open in Apple Music</em> — some browsers block third-party iframes when opened as a local <code>file://</code>.
+  </p>
+
+<script>
+  const vinyl       = document.getElementById('vinyl');
+  const tonearm     = document.getElementById('tonearm');
+  const powerBtn    = document.getElementById('powerBtn');
+  const powerIcon   = document.getElementById('powerIcon');
+  const powerLabel  = document.getElementById('powerLabel');
+  const turntable   = document.getElementById('turntable');
+  const nowPlaying  = document.getElementById('nowPlaying');
+  const nowText     = document.getElementById('nowPlayingText');
+
+  const PLAY_SVG = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+  const STOP_SVG = '<rect x="6" y="6" width="12" height="12" rx="1"></rect>';
+
+  let playing = false;
+  let audioCtx, crackleNode;
+
+  /* ----- Vinyl crackle (procedural pink-ish noise) ----- */
+  function startCrackle() {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const bufferSize = 2 * audioCtx.sampleRate;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const out = buffer.getChannelData(0);
+      // sparse crackle: mostly silent, occasional pops
+      for (let i = 0; i < bufferSize; i++) {
+        out[i] = (Math.random() < 0.0015) ? (Math.random() * 2 - 1) * 0.6 : (Math.random() * 2 - 1) * 0.02;
+      }
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 4000;
+
+      const gain = audioCtx.createGain();
+      gain.gain.value = 0;
+
+      noise.connect(filter).connect(gain).connect(audioCtx.destination);
+      noise.start();
+      // fade in
+      gain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 1.2);
+      crackleNode = { noise, gain };
+    } catch (e) { /* audio not allowed yet — that's fine */ }
+  }
+
+  function stopCrackle() {
+    if (!crackleNode) return;
+    const { noise, gain } = crackleNode;
+    const t = audioCtx.currentTime;
+    gain.gain.cancelScheduledValues(t);
+    gain.gain.linearRampToValueAtTime(0, t + 0.4);
+    setTimeout(() => { try { noise.stop(); } catch (e) {} }, 500);
+    crackleNode = null;
+  }
+
+  /* ----- Drop / lift the needle ----- */
+  function dropNeedle() {
+    if (playing) return;
+    playing = true;
+    tonearm.classList.add('playing');
+    powerBtn.classList.add('on');
+    turntable.classList.add('active');
+    document.body.classList.add('spinning');
+    powerLabel.textContent = 'Lift Needle';
+    powerIcon.innerHTML = STOP_SVG;
+    nowPlaying.classList.add('live');
+    nowText.textContent = 'Lowering stylus…';
+    startCrackle();
+    setTimeout(() => {
+      vinyl.classList.add('playing');
+      nowText.textContent = 'Now Spinning · 33⅓';
+    }, 900);
+  }
+
+  function liftNeedle() {
+    if (!playing) return;
+    playing = false;
+    vinyl.classList.remove('playing');
+    powerBtn.classList.remove('on');
+    turntable.classList.remove('active');
+    document.body.classList.remove('spinning');
+    powerLabel.textContent = 'Drop Needle';
+    powerIcon.innerHTML = PLAY_SVG;
+    nowPlaying.classList.remove('live');
+    nowText.textContent = 'Stylus resting';
+    stopCrackle();
+    setTimeout(() => tonearm.classList.remove('playing'), 200);
+  }
+
+  function toggle() { playing ? liftNeedle() : dropNeedle(); }
+
+  powerBtn.addEventListener('click', toggle);
+  vinyl.addEventListener('click', toggle);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target.tagName !== 'IFRAME' && e.target.tagName !== 'INPUT') {
+      e.preventDefault();
+      toggle();
+    }
+  });
+
+  /* ----- Floating gold dust motes ----- */
+  const dust = document.getElementById('dust');
+  function makeMote() {
+    const m = document.createElement('div');
+    m.className = 'mote';
+    m.style.left = (Math.random() * 100) + 'vw';
+    const dur = 14 + Math.random() * 14;
+    m.style.animationDuration = dur + 's';
+    m.style.animationDelay = (-Math.random() * dur) + 's';
+    m.style.opacity = (0.3 + Math.random() * 0.4).toString();
+    const size = 1.5 + Math.random() * 2.5;
+    m.style.width = size + 'px';
+    m.style.height = size + 'px';
+    dust.appendChild(m);
+  }
+  for (let i = 0; i < 28; i++) makeMote();
+</script>
+</body>
+</html>
