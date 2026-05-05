@@ -10,15 +10,17 @@ It's a single self-contained HTML file. Either:
 
 ```bash
 # Open directly
-open greatest-showman-vinyl.html
+open index.html
 ```
 
 …or, if your browser blocks the Apple Music iframe over `file://` (some do, for cookie/security reasons), serve it locally:
 
 ```bash
 python3 -m http.server 8000
-# then visit http://localhost:8000/greatest-showman-vinyl.html
+# then visit http://localhost:8000/
 ```
+
+It's also published via GitHub Pages at **https://eileenatduke.github.io/record_player/**.
 
 ## How it works
 
@@ -29,7 +31,7 @@ python3 -m http.server 8000
 
 ## Swap the playlist
 
-Open `greatest-showman-vinyl.html` and replace the iframe `src` (and the matching `<a>` href) with any `https://embed.music.apple.com/...` URL.
+Open `index.html` and replace the iframe `src` (and the matching `<a>` href) with any `https://embed.music.apple.com/...` URL.
 
 ## License
 
